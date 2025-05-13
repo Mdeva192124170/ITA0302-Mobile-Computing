@@ -1,0 +1,45 @@
+# Crypto Portfolio Management Tool - Basic Version
+
+class CryptoPortfolio:
+    def __init__(self):
+        self.portfolio = {}
+
+    def add_investment(self, coin, amount, price_per_coin):
+        if coin in self.portfolio:
+            self.portfolio[coin]['amount'] += amount
+            self.portfolio[coin]['total_invested'] += amount * price_per_coin
+        else:
+            self.portfolio[coin] = {
+                'amount': amount,
+                'total_invested': amount * price_per_coin
+            }
+
+    def update_price(self, prices):
+        self.current_prices = prices
+
+    def analyze_portfolio(self):
+        total_value = 0
+        total_invested = 0
+        print("Portfolio Analysis:")
+        print("-------------------")
+        for coin, data in self.portfolio.items():
+            current_price = self.current_prices.get(coin, 0)
+            current_value = data['amount'] * current_price
+            gain_loss = current_value - data['total_invested']
+            total_value += current_value
+            total_invested += data['total_invested']
+            print(f"{coin.upper()}: {data['amount']} coins")
+            print(f"  Invested: ${data['total_invested']:.2f}")
+            print(f"  Current Value: ${current_value:.2f}")
+            print(f"  Gain/Loss: ${gain_loss:.2f}\n")
+        
+        print(f"Total Invested: ${total_invested:.2f}")
+        print(f"Total Current Value: ${total_value:.2f}")
+        print(f"Net Gain/Loss: ${total_value - total_invested:.2f}")
+
+# Example usage
+portfolio = CryptoPortfolio()
+portfolio.add_investment('bitcoin', 0.5, 30000)
+portfolio.add_investment('ethereum', 2, 2000)
+portfolio.update_price({'bitcoin': 35000, 'ethereum': 2500})
+portfolio.analyze_portfolio()
